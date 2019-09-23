@@ -4,11 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="vertical">
 
     <WebView
         android:id="@+id/mainview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/loadProgress"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:translationY="300dp"
+        android:theme="@style/progressBarLoad"/>
 
 </LinearLayout>

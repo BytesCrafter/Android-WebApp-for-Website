@@ -1,13 +1,17 @@
 package com.example.brillianskinessentials;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 public class OtherActivity extends AppCompatActivity {
 
@@ -22,18 +26,38 @@ public class OtherActivity extends AppCompatActivity {
     }
 
     private WebView otherView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
 
+        progressBar = (ProgressBar)findViewById(R.id.loadProgress);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         otherView = (WebView) findViewById(R.id.otherview);
         otherView.setWebViewClient( new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar.setMax(100);
+                progressBar.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        otherView.setWebChromeClient( new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setProgress(newProgress);
+                super.onProgressChanged(view, newProgress);
+            }
         });
 
         WebSettings webSettings = otherView.getSettings();
