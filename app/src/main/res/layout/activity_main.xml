@@ -7,16 +7,23 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <WebView
-        android:id="@+id/mainview"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshScreen"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/loadProgress"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:translationY="300dp"
-        android:theme="@style/progressBarLoad"/>
+        <WebView
+            android:id="@+id/mainview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:id="@+id/loadProgress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:translationY="300dp"
+            android:theme="@style/progressBarLoad"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

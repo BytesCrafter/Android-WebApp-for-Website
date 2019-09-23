@@ -2,6 +2,7 @@ package com.example.brillianskinessentials;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,23 +16,34 @@ import android.widget.ProgressBar;
 
 public class OtherActivity extends AppCompatActivity {
 
+    private String otherUrl;
+
     @Override
     public void onStart() {
 
         Intent intent = getIntent();
-        String urlToLoad = intent.getExtras().getString("urlToLoad");
-        otherView.loadUrl(urlToLoad);
+        otherUrl = intent.getExtras().getString("urlToLoad");
+        otherView.loadUrl(otherUrl);
 
         super.onStart();
     }
 
     private WebView otherView;
     private ProgressBar progressBar;
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
+
+        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.refreshScreen);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                otherView.loadUrl(otherUrl);
+            }
+        });
 
         progressBar = (ProgressBar)findViewById(R.id.loadProgress);
 
@@ -44,10 +56,12 @@ public class OtherActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 progressBar.setMax(100);
                 progressBar.setVisibility(View.VISIBLE);
+                refreshLayout.setRefreshing(true);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                refreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
             }
         });

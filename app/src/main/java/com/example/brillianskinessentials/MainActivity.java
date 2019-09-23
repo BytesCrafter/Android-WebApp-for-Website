@@ -2,6 +2,7 @@ package com.example.brillianskinessentials;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webview;
     private ProgressBar progressBar;
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     public void onStart() {
@@ -38,13 +40,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.refreshScreen);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                webview.loadUrl(primaryUrl);
+            }
+        });
+
         progressBar = (ProgressBar)findViewById(R.id.loadProgress);
 
         webview = (WebView) findViewById(R.id.mainview);
         webview.setWebViewClient( new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-
+                refreshLayout.setRefreshing(true);
                 if( !url.contains(urlDomain))
                 {
                     Intent intent = new Intent(MainActivity.this, OtherActivity.class);
@@ -61,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                refreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
             }
         });
