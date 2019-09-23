@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,13 +11,23 @@ import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        webview.loadUrl("https://www.brilliantskinessentials.ph/");
+    private String primaryUrl = "https://www.brilliantskinessentials.ph/";
+    public String mainUrl() {
+        return primaryUrl;
     }
 
-    public WebView webview;
+    private String urlDomain = "brilliantskinessentials.ph";
+    public String domainName() {
+        return urlDomain;
+    }
+
+    private WebView webview;
+
+    @Override
+    public void onStart() {
+        webview.loadUrl(primaryUrl);
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
-                if( !url.contains("www.brilliantskinessentials.ph"))
+                if( !url.contains(urlDomain))
                 {
                     Intent intent = new Intent(MainActivity.this, OtherActivity.class);
                     intent.putExtra("urlToLoad", url);
@@ -38,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        webview.loadUrl("https://www.brilliantskinessentials.ph/");
 
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -55,10 +63,5 @@ public class MainActivity extends AppCompatActivity {
         {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
     }
 }

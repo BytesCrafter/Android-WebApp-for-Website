@@ -1,7 +1,6 @@
 package com.example.brillianskinessentials;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +13,12 @@ public class OtherActivity extends AppCompatActivity {
 
     @Override
     public void onStart() {
+
+        Intent intent = getIntent();
+        String urlToLoad = intent.getExtras().getString("urlToLoad");
+        otherView.loadUrl(urlToLoad);
+
         super.onStart();
-        Log.d("Bytes Crafter", "Currently on Other!");
     }
 
     private WebView otherView;
@@ -25,9 +28,6 @@ public class OtherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
 
-        //MainActivity.
-        //getSupportActionBar().setTitle("Other Activity");
-        //setTitle("Go Back");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -35,10 +35,6 @@ public class OtherActivity extends AppCompatActivity {
         otherView.setWebViewClient( new WebViewClient() {
 
         });
-
-        Intent intent = getIntent();
-        String urlToLoad = intent.getExtras().getString("urlToLoad");
-        otherView.loadUrl(urlToLoad);
 
         WebSettings webSettings = otherView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -48,11 +44,23 @@ public class OtherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if( item.getItemId() == android.R.id.home)
         {
-            //finish();
             Intent intent = new Intent(OtherActivity.this, MainActivity.class);
             startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(otherView.canGoBack())
+        {
+            otherView.goBack();
+        }
+
+        else
+        {
+            super.onBackPressed();
+        }
     }
 }
