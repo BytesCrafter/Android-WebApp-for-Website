@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "357741402736",
+    "firebase_url": "https://hersbox-36010400.firebaseio.com",
+    "project_id": "hersbox-36010400",
+    "storage_bucket": "hersbox-36010400.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357741402736:android:3273a7d2b7746fe4f6b2b5",
+        "android_client_info": {
+          "package_name": "com.BytesCrafter.HersBox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357741402736-uc3vms7k38i5lgen47nvp1bqn7fo8n38.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9C0p-O_wLv-ZMGfN8GArKhR7gDnt3QFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357741402736-uc3vms7k38i5lgen47nvp1bqn7fo8n38.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
