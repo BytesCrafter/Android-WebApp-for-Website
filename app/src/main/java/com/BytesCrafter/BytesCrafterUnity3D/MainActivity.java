@@ -14,12 +14,12 @@ import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String primaryUrl = "https://www.bytes-crafter.com";
+    private String primaryUrl = "https://www.bytescrafter.net";
     public String mainUrl() {
         return primaryUrl;
     }
 
-    private String urlDomain = "bytes-crafter.com";
+    private String urlDomain = "bytescrafter.net";
     public String domainName() {
         return urlDomain;
     }
