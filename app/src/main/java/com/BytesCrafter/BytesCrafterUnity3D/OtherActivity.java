@@ -6,16 +6,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
+
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdListener;
 
 public class OtherActivity extends AppCompatActivity {
 
     private String otherUrl;
+
+    private String intertitialAdUnit = "ca-app-pub-9202832039465189/9199166751";
+    private InterstitialAd mInterstitialAd;
+    private boolean mAdLoaded = false;
+    private int mAdShown = 0;
 
     @Override
     public void onStart() {
@@ -28,13 +35,51 @@ public class OtherActivity extends AppCompatActivity {
     }
 
     private WebView otherView;
-    private ProgressBar progressBar;
     SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId( intertitialAdUnit );
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                mAdLoaded = true;
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+                mAdLoaded = false;
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
 
         refreshLayout = (SwipeRefreshLayout)findViewById(R.id.refreshScreen);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -44,8 +89,6 @@ public class OtherActivity extends AppCompatActivity {
             }
         });
 
-        progressBar = (ProgressBar)findViewById(R.id.loadProgress);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -53,22 +96,27 @@ public class OtherActivity extends AppCompatActivity {
         otherView.setWebViewClient( new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progressBar.setMax(100);
-                progressBar.setVisibility(View.VISIBLE);
                 refreshLayout.setRefreshing(true);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 refreshLayout.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
+                if( mAdLoaded ) {
+                    //System.out.println("OtherActivity is on " + mAdShown);
+                    if( mAdShown < 7 ) {
+                        mAdShown += 1;
+                    } else {
+                        mInterstitialAd.show();
+                        mAdShown = 0;
+                    }
+                }
             }
         });
 
         otherView.setWebChromeClient( new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                progressBar.setProgress(newProgress);
                 super.onProgressChanged(view, newProgress);
             }
         });
@@ -79,8 +127,7 @@ public class OtherActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if( item.getItemId() == android.R.id.home)
-        {
+        if( item.getItemId() == android.R.id.home) {
             Intent intent = new Intent(OtherActivity.this, MainActivity.class);
             startActivity(intent);
         }
@@ -90,13 +137,9 @@ public class OtherActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(otherView.canGoBack())
-        {
+        if(otherView.canGoBack()) {
             otherView.goBack();
-        }
-
-        else
-        {
+        } else {
             super.onBackPressed();
         }
     }
