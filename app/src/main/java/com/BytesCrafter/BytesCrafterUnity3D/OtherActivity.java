@@ -2,8 +2,8 @@ package com.BytesCrafter.BytesCrafterUnity3D;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
